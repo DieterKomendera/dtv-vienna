@@ -1,15 +1,20 @@
 ^{:nextjournal.clerk/visibility :hide}
 (ns graph
-  (:require [nextjournal.clerk :as clerk])
+  (:require [dtv]
+            [nextjournal.clerk :as clerk])
   (:import [java.time LocalDate]))
+
+^{::clerk/visibility {:result :hide}}
+(defonce data (atom nil))
 
 ^{::clerk/viewer
   {:pred ::clerk/var-from-def
-   :transform-fn (comp clerk/mark-presented (clerk/update-val (fn [{::clerk/keys [var-from-def]}]
-                                                                {:value @@var-from-def})))
+   :transform-fn (comp clerk/mark-presented
+                       (clerk/update-val (fn [var]
+                                           {:value @@var})))
    :render-fn '(fn [{:as x :keys [var-name value options]}]
-                 (v/html [:h1 (:text (:title value))]))}}
-(defonce data (atom nil))
+                 (nextjournal.clerk.viewer/html [:h1 (:text (:title value))]))}}
+#'data
 
 ^::clerk/no-cache
 (when-let [d @data]
@@ -26,9 +31,9 @@
   {:transform-fn clerk/mark-presented
    :render-fn
    '(fn [value]
-      (v/html
+      (nextjournal.clerk.viewer/html
        (when-let [{:keys [lat lng]} value]
-         [v/with-d3-require {:package ["leaflet@1.9.3/dist/leaflet.js"]}
+         [nextjournal.clerk.viewer/with-d3-require {:package ["leaflet@1.9.3/dist/leaflet.js"]}
           (fn [leaflet]
             [:div {:style {:height 400}
                    :ref
