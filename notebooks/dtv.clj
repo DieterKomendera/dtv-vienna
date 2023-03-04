@@ -3,7 +3,6 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns dtv
   (:require [nextjournal.clerk :as clerk]
-            [nextjournal.clerk.viewer :as v]
             [tablecloth.api :as tc]
             [ogd.utils :as utils]
             [tech.v3.dataset :as ds]
