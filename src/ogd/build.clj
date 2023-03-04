@@ -27,10 +27,10 @@
             :resource->url @clerk.config/!resource->url}))))
 
 
-(defn all! []
+(defn all! [_opts]
   (doseq [[name data] dtv/counting-points]
     (gen-graph! name data)))
 
 
 (comment
-  (all!))
+  (all! {}))
