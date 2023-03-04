@@ -1,5 +1,6 @@
 (ns ogd.build
-  (:require [clojure.string :as str]
+  (:require [babashka.fs :as fs]
+            [clojure.string :as str]
             [dtv]
             [graph]
             [nextjournal.clerk :as clerk]
@@ -14,6 +15,7 @@
                           str/lower-case))
         out-name (str "public/" out-path ".html")
         notebook "notebooks/graph.clj"]
+    (fs/create-dirs (fs/parent out-name))
     (reset! graph/data data)
     (spit out-name
           (view/->static-app
