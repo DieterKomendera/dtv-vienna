@@ -7,5 +7,8 @@
          hato/hato {:mvn/version "0.8.2"}
          }
 
- :aliases {:nextjournal/clerk {:exec-fn nextjournal.clerk/build!
-                               :exec-args {:paths ["notebooks/dtv.clj"]}}}}
+ :aliases {:nextjournal/clerk
+           #_{:exec-fn nextjournal.clerk/build!
+              :exec-args {:paths ["notebooks/dtv.clj"]}}
+           {:exec-fn ogd.build/all!}
+           }}
