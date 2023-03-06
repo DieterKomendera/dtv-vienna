@@ -5,21 +5,15 @@
   (:import [java.time LocalDate]))
 
 ^{::clerk/visibility {:result :hide}}
-(defonce data (atom nil))
+(def counting-point-label "Burggasse II - Zentrum - 1213")
 
-^{::clerk/viewer
-  {:pred ::clerk/var-from-def
-   :transform-fn (comp clerk/mark-presented
-                       (clerk/update-val (fn [var]
-                                           {:value @@var})))
-   :render-fn '(fn [{:as x :keys [var-name value options]}]
-                 (nextjournal.clerk.viewer/html [:h1 (:text (:title value))]))}}
-#'data
+^{::clerk/visibility {:result :hide}}
+(def data (get dtv/graph-maps counting-point-label))
 
-^::clerk/no-cache
-(when-let [d @data]
-  (clerk/vl d))
+(clerk/html
+ [:h1 (:text (:title data))])
 
+(clerk/vl data)
 
 (clerk/html
  [:link {:rel "stylesheet"
@@ -58,15 +52,10 @@
 
 
 ;; ## Zählpunkt Standort
-
-
-^::clerk/no-cache
 (clerk/with-viewer leaflet
-  (when-let [d @data]
-    (:dtv/location d)))
+  (:dtv/location data))
 
-^::clerk/no-cache
-(when-let [{:keys [dtv/location]} @data]
+(let [{:keys [dtv/location]} data]
   (clerk/html
    [:div.text-xs.font-mono.text-slate-500
     [:span (:lat location) ", " (:lng location) " | "]
@@ -86,4 +75,4 @@
    "Datensatz: "
    [:a {:href "https://www.data.gv.at/katalog/dataset/4707e82a-154f-48b2-864c-89fffc6334e1" }
     "Verkehrszählstellen Zählwerte Wien"]]
-  [:p "Erstellt am " (str (LocalDate/now)) " von " [:a.text-blue.underline {:href "https://twitter.com/DieterKomendera"} "Dieter Komendera"]]])
+  [:p "Erstellt am " (str (LocalDate/now)) " von " [:a.text-blue.underline {:href "https://wien.rocks/@DieterKomendera"} "Dieter Komendera"]]])

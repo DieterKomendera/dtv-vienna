@@ -94,28 +94,34 @@
       (tc/group-by ["ZNAME" "RINAME" "ZNR"])
       ;; filter grouped datasets for only ones with recent data
       (tc/without-grouping->
-       (tc/drop-rows (fn [r]
-                       (> 2022 (apply max (get (:data r) "JAHR"))))))
-      (tc/groups->map)
-      (->>
+       (tc/drop-rows (fn [r] (> 2022 (apply max (get (:data r) "JAHR"))))))
+      (tc/groups->map)))
+
+(defn group-cols->label [{:as _group-cols :strs [ZNAME RINAME ZNR]}]
+  (str ZNAME " - " RINAME " - " ZNR))
+
+(defn counting-point-data->vl-graph [{:as _group-cols :strs [ZNAME RINAME ZNR]} ds]
+  (-> dtv-graph
+      (assoc :dtv/location (first (get ds "SHAPE")))
+      (assoc :title {:text     (str ZNAME " - " RINAME)
+                     :subtitle (str "Zählstelle Nr. " ZNR " in Richtung " RINAME)})
+      (assoc-in [:data :values] (into [] (ds/mapseq-reader ds)))))
+
+(def graph-maps
+  (->> counting-points
        (into {}
-             (map (fn [[{:strs [ZNAME RINAME ZNR]} ds]]
-                    [(str ZNAME " - " RINAME " - " ZNR)
-                     (-> dtv-graph
-                         (assoc :dtv/location (first (get ds "SHAPE")))
-                         (assoc :title {:text     (str ZNAME " - " RINAME)
-                                        :subtitle (str "Zählstelle Nr. " ZNR " in Richtung " RINAME)})
-                         (assoc-in [:data :values] (into [] (ds/mapseq-reader ds))))]))))))
+             (map (fn [[group-cols ds]]
+                    [(group-cols->label group-cols)
+                     (counting-point-data->vl-graph group-cols ds)])))))
 
-
-(defonce select-state (atom (first (sort (keys counting-points)))))
+(defonce select-state (atom (first (sort (keys graph-maps)))))
 
 (clerk/with-viewer
   {:transform-fn (comp (clerk/update-val
                         (fn [var]
                           {:var-name (symbol var)
                            :value @@var
-                           :options (sort (keys counting-points)) }))
+                           :options (sort (keys graph-maps)) }))
                        clerk/mark-presented)
 
    :render-fn    '(fn [{:as x :keys [var-name value options]}]
@@ -127,5 +133,5 @@
   #'select-state)
 
 ^::clerk/no-cache
-(when-let [data (get counting-points @select-state)]
+(when-let [data (get graph-maps @select-state)]
   (clerk/vl data))

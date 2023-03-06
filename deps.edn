@@ -9,6 +9,6 @@
 
  :aliases {:nextjournal/clerk
            #_{:exec-fn nextjournal.clerk/build!
-              :exec-args {:paths ["notebooks/dtv.clj"]}}
-           {:exec-fn ogd.build/all!}
+              :exec-args {:paths ["dtv_*.clj"]}}
+           {:exec-fn ogd.build/all-for-garden!}
            }}
