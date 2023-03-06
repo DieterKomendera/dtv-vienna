@@ -4,30 +4,7 @@
             [dtv]
             [graph]
             [nextjournal.clerk :as clerk]
-            [nextjournal.clerk.config :as clerk.config]
-            [nextjournal.clerk.view :as view]
             [rewrite-clj.zip :as z]))
-
-(defn gen-graph! [name data]
-  (let [out-path (str "build/"
-                      )
-        out-name (str "public/" out-path ".html")
-        notebook "notebooks/graph.clj"]
-    (fs/create-dirs (fs/parent out-name))
-    (reset! graph/data data)
-    (spit out-name
-          (view/->static-app
-           {:bundle?       false
-            :current-path  notebook
-            :path->url     {notebook out-name
-                            ""       "index.html"}
-            :path->doc     {notebook (clerk/file->viewer notebook)}
-            :resource->url @clerk.config/!resource->url}))))
-
-
-(defn all! [_args]
-  (doseq [[name data] dtv/graph-maps]
-    (gen-graph! name data)))
 
 (defn id->file-name [id]
   (str "notebooks/dtv/zählstelle-"
@@ -60,6 +37,4 @@
 
 (comment
   (gen-counting-points-notebooks!)
-
-  (all-for-garden! {})
-  (all! {}))
+  (all-for-garden! {}))
