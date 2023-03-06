@@ -52,10 +52,11 @@
           contents (notebook-contents id)]
       (spit out-name contents))))
 
-(defn all-for-garden! [_args]
+(defn all-for-garden! [args]
   (gen-counting-points-notebooks!)
-  (nextjournal.clerk/build! {:paths ["notebooks/dtv/zählstelle-*.clj"]
-                             :index "notebooks/dtv_index.clj"}))
+  (nextjournal.clerk/build! (merge args
+                                   {:paths ["notebooks/dtv/zählstelle-*.clj"]
+                                    :index "notebooks/dtv_index.clj"})))
 
 (comment
   (gen-counting-points-notebooks!)
