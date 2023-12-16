@@ -13,6 +13,7 @@
 
 ;; Quelle: https://www.data.gv.at/katalog/dataset/4707e82a-154f-48b2-864c-89fffc6334e1
 
+^::clerk/no-cache
 (def counting-points-ds
   (ds/->dataset
    (utils/string->stream (slurp data-url :encoding "ISO-8859-1"))
