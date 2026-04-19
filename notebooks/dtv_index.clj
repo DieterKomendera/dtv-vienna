@@ -17,8 +17,7 @@
  [:div.text-xs.font-mono
   [:p "Die Detailseiten wurden verschoben zu: "
    [:a.text-blue.underline {:href "https://ogd-wien.apps.garden/dtv"} "ogd-wien.apps.garden/dtv"]]
-  [:p.text-slate-500 "Sie werden in " [:span#countdown "5"] " Sekunden automatisch weitergeleitet..."]
-  [:script "(function(){var s=5;var el=document.getElementById('countdown');var i=setInterval(function(){s--;if(el)el.textContent=s;if(s<=0){clearInterval(i);window.location.href='https://ogd-wien.apps.garden/dtv';}},1000);})();"]])
+  [:p.text-slate-500 "Die Detailseiten wurden verschoben."]])
 
 (clerk/html
  [:div.text-xs.font-mono.text-slate-500
