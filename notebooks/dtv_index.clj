@@ -16,8 +16,7 @@
 (clerk/html
  [:div.text-xs.font-mono
   [:p "Die Detailseiten wurden verschoben zu: "
-   [:a.text-blue.underline {:href "https://ogd-wien.apps.garden/dtv"} "ogd-wien.apps.garden/dtv"]]
-  [:p.text-slate-500 "Die Detailseiten wurden verschoben."]])
+   [:a.text-blue.underline {:href "https://ogd-wien.apps.garden/dtv"} "ogd-wien.apps.garden/dtv"]]])
 
 (clerk/html
  [:div.text-xs.font-mono.text-slate-500
