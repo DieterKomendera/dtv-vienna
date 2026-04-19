@@ -21,12 +21,25 @@
     "Verkehrszählstellen Zählwerte Wien"]]])
 
 (clerk/html
- [:div.viewer-markdown.text-xs
-  (into [:ul]
-        (map
-         (fn [id]
-           [:li [:a.underline {:href (clerk/doc-url (ogd.build/id->file-name id))} id]])
-         (sort (keys dtv/graph-maps))))])
+ [:div.text-xs.font-mono
+  [:p "Die Detailseiten wurden verschoben zu: "
+   [:a.text-blue.underline {:href "https://ogd-wien.apps.garden/dtv"} "ogd-wien.apps.garden/dtv"]]
+  [:p.text-slate-500 "Sie werden in " [:span#countdown "5"] " Sekunden automatisch weitergeleitet..."]])
+
+(clerk/html
+ [:script {:type "text/javascript"}
+  "
+  let seconds = 5;
+  const countdownEl = document.getElementById('countdown');
+  const interval = setInterval(() => {
+    seconds--;
+    if (countdownEl) countdownEl.textContent = seconds;
+    if (seconds <= 0) {
+      clearInterval(interval);
+      window.location.href = 'https://ogd-wien.apps.garden/dtv';
+    }
+  }, 1000);
+  "])
 
 (clerk/html
  [:div.text-xs.font-mono.text-slate-500
